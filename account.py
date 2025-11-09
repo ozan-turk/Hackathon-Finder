@@ -1,4 +1,6 @@
 import sqlite3 # importing SQL function
+import bcrypt # importing hash func
+import getpass # importing password inp func
 
 def create_connection(): # creating connection to be used
     return sqlite3.connect("user_credentials.db") # define connection, creates if not present
@@ -11,7 +13,14 @@ def get_username(): # getting username
     return input("Enter your username: ").strip()
 
 def get_password(): # getting user pw
-    return input("Enter your password: ").strip()
+    return getpass.getpass("Enter your password: ").strip()
+
+def hash_input(input): # function to return the hashed version of the input
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(input.encode("utf-8"), salt)
+
+def password_check(input, hashed_pw): # function that retuns whether the two passwords are the same, if so returns true
+    return bcrypt.checkpw(input.encode("utf-8"), hashed_pw)
 
 def form_type(): # getting user's desired authorisation
     while True: # loop that breaks when user enters correct auth type
@@ -26,7 +35,7 @@ def login(username, password, connection): # function to use passed in credentia
     cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
     user_pw = cursor.fetchone() # get results
     if user_pw: # if there are results, username was found
-        if user_pw[0] == password: # if the password found is the same as user input, return true
+        if password_check(password, user_pw[0]): # if the password found is the same as user input, return true
             print("Password correct")
             return True
         else: # else return false
@@ -44,6 +53,7 @@ def register(username, password, connection): # function to be used to create ac
         print("Username already in use")
         return False
     else: # else create the account and commit
+        password = hash_input(password) # hash password
         cursor.execute("INSERT INTO users (username, password) VALUES (?,?)", (username, password))
         connection.commit()
         print("Account made")
