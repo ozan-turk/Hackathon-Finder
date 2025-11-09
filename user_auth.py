@@ -59,19 +59,21 @@ def register(username, password, connection): # function to be used to create ac
         print("Account made")
         return True
 
-connection = create_connection()
-initialise_table(connection)
-access_gained = False
+def main():
+    connection = create_connection()
+    initialise_table(connection)
+    access_gained = False
 
-while access_gained == False:
-    form_type = form_type()
-    if form_type == "R":
-        username = get_username()
-        password = get_password()
-        access_gained = register(username,password,connection)
-    else:
-        username = get_username()
-        password = get_password()
-        access_gained = login(username,password,connection)
-    print("")
-connection.close()
+    while access_gained == False:
+        user_choice = form_type()
+        if user_choice == "R":
+            username = get_username()
+            password = get_password()
+            access_gained = register(username,password,connection)
+        else:
+            username = get_username()
+            password = get_password()
+            access_gained = login(username,password,connection)
+        print("")
+    connection.close()
+    return username
