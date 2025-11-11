@@ -1,6 +1,6 @@
 import sqlite3 # importing SQL function
-import bcrypt # importing hash func
-import getpass # importing password inp func
+import bcrypt # importing hash function
+import getpass # importing password inp function
 
 def create_connection(): # creating connection to be used
     return sqlite3.connect("user_credentials.db") # define connection, creates if not present
@@ -15,12 +15,12 @@ def get_username(): # getting username
 def get_password(): # getting user pw
     return getpass.getpass("Enter your password: ").strip()
 
-def hash_input(input): # function to return the hashed version of the input
+def hash_input(input_text): # function to return the hashed version of the input
     salt = bcrypt.gensalt()
-    return bcrypt.hashpw(input.encode("utf-8"), salt)
+    return bcrypt.hashpw(input_text.encode("utf-8"), salt)
 
-def password_check(input, hashed_pw): # function that retuns whether the two passwords are the same, if so returns true
-    return bcrypt.checkpw(input.encode("utf-8"), hashed_pw)
+def password_check(input_text, hashed_pw): # function that retuns whether the two passwords are the same, if so returns true
+    return bcrypt.checkpw(input_text.encode("utf-8"), hashed_pw)
 
 def form_type(): # getting user's desired authorisation
     while True: # loop that breaks when user enters correct auth type
@@ -28,7 +28,7 @@ def form_type(): # getting user's desired authorisation
         if user_input == "R" or user_input == "L":
             return user_input # break loop
         else:
-            print("Try again")
+            print("Try again, enter R or L")
 
 def login(username, password, connection): # function to use passed in credentials to see if the account exists in the db, returning results
     cursor = connection.cursor()
@@ -77,3 +77,6 @@ def main():
         print("")
     connection.close()
     return username
+
+if __name__ == "__main__":
+    main()
