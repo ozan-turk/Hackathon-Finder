@@ -1,6 +1,7 @@
 import os # importing os functions
-import user_auth # importing the auth handler
 import sys
+import user_auth # importing the auth handler
+import find_hackathon
 
 def clear_screen(): # function to clear user terminal
     if os.name == "nt": # checking if windows
@@ -32,12 +33,15 @@ def main():
         intro_screen(username)
         user_input = get_intro_input()
         if user_input == 3:
+            clear_screen()
             sys.exit("You chose to exit the program")
         elif user_input == 2:
             clear_screen()
             username = user_auth.main()
         elif user_input == 1:
-            print("")
+            clear_screen()
+            find_hackathon.main(username)
+            
 
 if __name__ == "__main__":
     main()
