@@ -7,7 +7,8 @@ def create_connection(): # creating connection to be used
 
 def initialise_table(connection): # initialising table if not existent within the db
     cursor = connection.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS users(username TEXT PRIMARY KEY, password TEXT)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS users(username TEXT PRIMARY KEY, password BLOB)""")
+    connection.commit()
 
 def get_username(): # getting username
     return input("Enter your username: ").strip()
